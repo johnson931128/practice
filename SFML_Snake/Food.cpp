@@ -1,10 +1,6 @@
 #include "Food.h"
 #include <random> // 引用 C++ 的隨機數函式庫
-
-// 告訴編譯器，這些常數在其他檔案(Snake.cpp)中已經定義了，我們只是要在這裡使用它們
-extern const float GRID_SIZE;
-extern const float WINDOW_WIDTH;
-extern const float WINDOW_HEIGHT;
+#include "Config.h"
 
 Food::Food() {
     // 設定食物方塊的大小和顏色

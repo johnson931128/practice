@@ -1,8 +1,6 @@
 #include "Snake.h"
+#include "Config.h"
 
-const float GRID_SIZE = 40.0;
-const float WINDOW_WIDTH = 800.0;
-const float WINDOW_HEIGHT = 600.0;
 
 Snake::Snake() {
     mDirection = Direction::Right;
