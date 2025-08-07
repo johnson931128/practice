@@ -1,6 +1,7 @@
 #pragma once
 #include "Snake.h"
 #include <SFML/Graphics.hpp>
+#include "Food.h"
 
 class Game {
 public:
@@ -14,10 +15,12 @@ private:
     void processEvents();
     void update();
     void render();
+    void checkCollision();
 
     // 私有成員變數，封裝了遊戲的狀態
     sf::RenderWindow mWindow; // 遊戲視窗
     // 之後還會加入蛇、食物等...
     Snake mSnake;
+    Food mFood;
     sf::Clock mClock;
 };

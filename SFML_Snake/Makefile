@@ -6,7 +6,7 @@ CXXFLAGS = -std=c++17 -Wall
 LDFLAGS = -lsfml-graphics -lsfml-window -lsfml-system
 
 # 專案檔案設定
-SRCS = main.cpp Game.cpp Snake.cpp
+SRCS = main.cpp Game.cpp Snake.cpp Food.cpp
 OBJS = $(SRCS:.cpp=.o) # 根據 SRCS 自動產生 OBJS 列表 (main.o Game.o)
 TARGET = snake
 

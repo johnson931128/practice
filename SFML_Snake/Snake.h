@@ -3,7 +3,7 @@
 #include <deque>
 #include <SFML/Graphics.hpp>
 
-enum class Direction { Up, Down, Left, Right };
+enum class Direction { None, Up, Down, Left, Right };
 
 class Snake {
 public:
@@ -11,6 +11,7 @@ public:
     void update();
     void render(sf::RenderWindow& window);
     void setDirection(Direction dir);
+    sf::Vector2f getHeadPosition() const;
     bool isAlive() const;
     void grow();
 private:

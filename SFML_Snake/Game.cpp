@@ -78,9 +78,9 @@ void Game::update() {
     if (mSnake.isAlive()) {
         mSnake.update();
     }
+    checkCollision();
 }
 
-// ...
 
 // 繪製所有遊戲物件到畫面上
 void Game::render() {
@@ -98,6 +98,18 @@ void Game::render() {
             mWindow.draw(cell);
         }
     }
+    mFood.render(mWindow);
     mSnake.render(mWindow);
     mWindow.display();
+}
+
+
+void Game::checkCollision(){
+    if (!mSnake.isAlive()) return;
+
+    // 蛇頭和食物的碰撞
+    if (mSnake.getHeadPosition() == mFood.getPosition()) {
+        mSnake.grow();
+        mFood.respawn();
+    }
 }
