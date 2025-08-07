@@ -1,17 +1,22 @@
 #include "Snake.h"
 #include "Config.h"
 
-
 Snake::Snake() {
-    mDirection = Direction::Right;
+    mDirection = Direction::None;
     mIsAlive = true;
     mGrowPending = false;
+
     mBody.clear();
-    for (int i = 0; i < 3; ++i){
+
+    // 【修改這裡】先計算中心格線的索引，再換算回像素位置
+    size_t startX = static_cast<size_t>(WINDOW_WIDTH / GRID_SIZE) / 2;
+    size_t startY = static_cast<size_t>(WINDOW_HEIGHT / GRID_SIZE) / 2;
+
+    for (int i = 0; i < 3; ++i) {
         sf::RectangleShape segment;
-        segment.setSize(sf::Vector2f(GRID_SIZE - 1, GRID_SIZE - 1));
+        segment.setSize(sf::Vector2f(GRID_SIZE - 1.0f, GRID_SIZE - 1.0f));
         segment.setFillColor(sf::Color::Green);
-        segment.setPosition(WINDOW_WIDTH / 2 - i * GRID_SIZE, WINDOW_HEIGHT / 2);
+        segment.setPosition((startX - i) * GRID_SIZE, startY * GRID_SIZE);
         mBody.push_back(segment);
     }
 }
@@ -21,11 +26,12 @@ void Snake::grow() {mGrowPending = true;}
 
 void Snake::setDirection(Direction dir) {
     // 防止蛇直接 180 度掉頭
-    if (mDirection == Direction::Up && dir == Direction::Down) return;
-    if (mDirection == Direction::Down && dir == Direction::Up) return;
-    if (mDirection == Direction::Left && dir == Direction::Right) return;
-    if (mDirection == Direction::Right && dir == Direction::Left) return;
-
+    if (mDirection != Direction::None){
+        if (mDirection == Direction::Up && dir == Direction::Down) return;
+        if (mDirection == Direction::Down && dir == Direction::Up) return;
+        if (mDirection == Direction::Left && dir == Direction::Right) return;
+        if (mDirection == Direction::Right && dir == Direction::Left) return;
+    }
     mDirection = dir;
 }
 
