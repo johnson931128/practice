@@ -1,0 +1,4 @@
+*.o
+SFML_Snake
+*.swp
+*~
