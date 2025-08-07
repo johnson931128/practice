@@ -1,5 +1,8 @@
 #include "Snake.h"
 #include "Config.h"
+#include <algorithm> // for std::any_of
+#include <iterator> // for std::next
+
 
 Snake::Snake() {
     mDirection = Direction::None;
@@ -68,6 +71,17 @@ void Snake::update() {
         mIsAlive = false;
         return;
     }
+
+    // 【新增】自我碰撞偵測
+    // 我們需要在「將新蛇頭加入身體前」檢查
+    // 檢查範圍是從「第二節」到「蛇尾」
+    bool collision = std::any_of(std::next(mBody.begin()), mBody.end(),
+        [&](const sf::RectangleShape& segment){
+            return newHead.getPosition() == segment.getPosition();
+        }
+    );
+
+    if (collision){mIsAlive = false; return; }
 
     mBody.push_front(newHead);
 
