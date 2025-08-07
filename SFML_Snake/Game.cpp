@@ -11,14 +11,27 @@ Game::Game()
     // 載入字型並設定所有文字
     if (!mFont.loadFromFile("font.ttf")) {
         std::cerr << "Error: Could not load font.ttf" << std::endl;
+        exit(1);
     }
+    std::cout << "DEBUG: Game constructor started." << std::endl;
     setupTexts();
     resetGame();
+    std::cout << "DEBUG: Game constructor finished." << std::endl;
 }
 
 void Game::setupTexts() {
+    std::cout << "DEBUG: setupTexts() called." << std::endl;
+
+    // 我們在這裡加強錯誤處理
+    if (!mFont.loadFromFile("font.ttf")) {
+        std::cerr << "FATAL ERROR: Could not load font.ttf! The file might be corrupt or in the wrong place." << std::endl;
+        exit(1); // 如果字型載入失敗，直接終止程式，避免後續崩潰
+    }
+    std::cout << "DEBUG: Font loaded successfully." << std::endl;
+
     // --- 主選單文字 ---
     mTitleText.setFont(mFont);
+    std::cout << "DEBUG: mTitleText font set." << std::endl;
     mTitleText.setString("SNAKE");
     mTitleText.setCharacterSize(80);
     sf::FloatRect titleBounds = mTitleText.getLocalBounds();
