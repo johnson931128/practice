@@ -1,25 +1,30 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <string>
 
-// 這是我們遊戲世界中所有物件的抽象基礎類別
 class GameObject {
 public:
-    // 虛擬解構函式，對於要被繼承的基礎類別來說至關重要
+    // 【修正點】加入了這個必要的建構函式
+    // 子類別在建立時，必須呼叫這個建構函式來初始化基礎部分
+    GameObject(const std::string& name, const std::string& description)
+        : _name(name), _description(description), _isAlive(true) {}
+
+    // 虛擬解構函式
     virtual ~GameObject() = default;
 
-    // 純虛擬函式 (Pure Virtual Functions)
-    // 這兩個函式強制所有子類別都必須提供自己的實作版本
+    // 純虛擬函式
     virtual void update(sf::Time dt) = 0;
     virtual void draw(sf::RenderWindow& window) const = 0;
 
-    // 公開的 getter / setter 函式
-    sf::Vector2f getPosition() const { return mPosition; }
-    bool isAlive() const { return mIsAlive; }
-    void destroy() { mIsAlive = false; } // 用於標記物件為「待銷毀」
+    // 公開的 getter / setter
+    sf::Vector2f getPosition() const { return _position; }
+    bool isAlive() const { return _isAlive; }
+    void destroy() { _isAlive = false; }
 
 protected:
-    // protected 成員變數，讓子類別可以直接存取
-    sf::Vector2f mPosition;
-    sf::Vector2f mVelocity;
-    bool mIsAlive{true}; // 使用 C++11 的成員初始化
+    std::string _name;
+    std::string _description;
+    sf::Vector2f _position;
+    sf::Vector2f _velocity;
+    bool _isAlive;
 };
