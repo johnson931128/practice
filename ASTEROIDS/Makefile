@@ -6,7 +6,7 @@ CXXFLAGS = -std=c++17 -Wall
 LDFLAGS = -lsfml-graphics -lsfml-window -lsfml-system
 
 # 專案檔案設定
-SRCS = main.cpp Game.cpp Player.cpp
+SRCS = main.cpp Game.cpp Player.cpp Asteroid.cpp
 OBJS = $(SRCS:.cpp=.o)
 TARGET = asteroids
 
