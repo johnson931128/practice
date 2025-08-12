@@ -15,6 +15,8 @@ Game::Game()
     }
 }
 
+Game::~Game() = default;
+
 void Game::run() {
     sf::Clock clock;
     while (_window.isOpen()) {
