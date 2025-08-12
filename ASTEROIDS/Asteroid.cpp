@@ -64,8 +64,8 @@ Asteroid::Asteroid(sf::Vector2u windowSize)
     _velocity = { std::cos(angle) * speed, std::sin(angle) * speed };
 }
 
-// Asteroid 的 update 函式實作
-void Asteroid::update(sf::Time dt) {
+// 【修正點】修改 update 函式的回傳型別和加上回傳值
+std::unique_ptr<GameObject> Asteroid::update(sf::Time dt) {
     _position += _velocity * dt.asSeconds();
     _shape.rotate(_rotationSpeed * dt.asSeconds());
 
@@ -74,11 +74,15 @@ void Asteroid::update(sf::Time dt) {
     if (_position.x > 800.f + radius) _position.x = -radius;
     if (_position.y < -radius) _position.y = 600.f + radius;
     if (_position.y > 600.f + radius) _position.y = -radius;
+
+    // 因為小行星在 update 時不會產生新的物件，所以我們回傳空指標
+    return nullptr;
 }
 
 // Asteroid 的 draw 函式實作
 void Asteroid::draw(sf::RenderWindow& window) const {
     sf::CircleShape shapeToDraw = _shape;
     shapeToDraw.setPosition(_position);
+    shapeToDraw.setRotation(_shape.getRotation());
     window.draw(shapeToDraw);
 }

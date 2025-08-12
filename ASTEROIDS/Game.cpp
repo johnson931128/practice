@@ -1,31 +1,20 @@
 #include "Game.h"
-#include "Player.h"   // 我們需要引入 Player.h，因為我們要建立 Player
-#include "Asteroid.h" // 我們需要引入 Asteroid.h，因為我們要建立 Asteroid
+#include "Player.h"
+#include "Asteroid.h"
+// 我們不再需要在此 #include "Bullet.h"，因為 Game 不直接建立 Bullet
 
-// Game 的建構函式
 Game::Game() 
-    : _window(sf::VideoMode(800, 600), "SFML Asteroids - Step 2") 
+    : _window(sf::VideoMode(800, 600), "SFML Asteroids - Pew Pew!") 
 {
-    // === 核心修改 1: 在遊戲開始時，動態建立物件 ===
+    // 建立一個玩家
+    _gameObjects.push_back(std::make_unique<Player>());
 
-    // 1. 建立一個玩家
-    // std::make_unique<Player>() 會在記憶體中建立一個新的 Player 物件，
-    // 並用一個 unique_ptr 智慧指標把它包起來。
-    auto player = std::make_unique<Player>();
-
-    // std::move() 是一個 C++11 的特性，它能高效地將 player 指標的「所有權」
-    // 「移動」到我們的 _gameObjects 容器中。移動後，原來的 player 指標就變空了。
-    _gameObjects.push_back(std::move(player));
-
-    // 2. 建立 5 顆小行星
+    // 建立 5 顆小行星
     for (int i = 0; i < 5; ++i) {
-        // 我們直接在 push_back 的參數中建立新的小行星
-        // 並將視窗大小傳給它，讓它知道該在哪裡生成
         _gameObjects.push_back(std::make_unique<Asteroid>(_window.getSize()));
     }
 }
 
-// 主遊戲迴圈 (這裡不需要改變)
 void Game::run() {
     sf::Clock clock;
     while (_window.isOpen()) {
@@ -36,7 +25,6 @@ void Game::run() {
     }
 }
 
-// 事件處理 (這裡不需要改變)
 void Game::processEvents() {
     sf::Event event;
     while (_window.pollEvent(event)) {
@@ -46,32 +34,34 @@ void Game::processEvents() {
     }
 }
 
-// 更新所有遊戲物件的狀態
 void Game::update(sf::Time dt) {
-    // === 核心修改 2: 更新所有物件 ===
-    
-    // 我們使用 C++11 的「範圍 for 迴圈」(range-based for loop)
-    // 來遍歷 _gameObjects 容器中的每一個物件。
-    // "auto&" 代表「自動推斷型別，並使用引用（&）以避免不必要的複製」
+    // === 核心修改：接收新產生的物件 ===
+
+    // 1. 建立一個「等候區」來暫存這一幀新產生的所有物件
+    std::vector<std::unique_ptr<GameObject>> newObjects;
+
+    // 2. 遍歷所有現存的物件，更新它們，並接收新物件
     for (auto& gameObject : _gameObjects) {
-        // 這就是「多型」的威力！
-        // 我們不需要知道 gameObject 到底是 Player 還是 Asteroid，
-        // 只需要呼叫 update()，C++ 就會自動根據物件的實際型別，
-        // 去執行正確的 update() 版本。
-        gameObject->update(dt);
+        // 呼叫物件的 update，並接收可能的回傳值
+        auto newObject = gameObject->update(dt);
+
+        // 如果回傳的不是空指標，代表有新物件（子彈）產生
+        if (newObject) {
+            // 將這個新物件的所有權「移動」到我們的等候區 newObjects 中
+            newObjects.push_back(std::move(newObject));
+        }
+    }
+
+    // 3. 【重要】在所有更新都完成後，才將等候區的物件加入到主列表中
+    for (auto& newObject : newObjects) {
+        _gameObjects.push_back(std::move(newObject));
     }
 }
 
-// 繪製所有遊戲物件
 void Game::render() {
     _window.clear();
 
-    // === 核心修改 3: 繪製所有物件 ===
-
-    // 同樣地，我們遍歷所有物件
     for (const auto& gameObject : _gameObjects) {
-        // 並呼叫它們各自的 draw() 函式
-        // const auto& 的 const 代表我們在繪製過程中，保證不會修改到物件
         gameObject->draw(_window);
     }
 

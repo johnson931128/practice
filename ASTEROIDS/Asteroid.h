@@ -11,7 +11,7 @@ public:
 
     // 我們必須「覆寫」(override) 來自 GameObject 的這兩個函式。
     // 這是繼承時的「合約」，要求我們必須提供 Asteroid 自己版本的更新邏輯和繪製方式。
-    void update(sf::Time dt) override;
+    std::unique_ptr<GameObject> update(sf::Time dt) override;
     void draw(sf::RenderWindow& window) const override;
 
 private:

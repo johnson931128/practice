@@ -1,22 +1,24 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <string>
+#include <memory> // <--- 新增：為了使用 std::unique_ptr
 
 class GameObject {
 public:
-    // 【修正點】加入了這個必要的建構函式
-    // 子類別在建立時，必須呼叫這個建構函式來初始化基礎部分
     GameObject(const std::string& name, const std::string& description)
         : _name(name), _description(description), _isAlive(true) {}
 
-    // 虛擬解構函式
     virtual ~GameObject() = default;
 
-    // 純虛擬函式
-    virtual void update(sf::Time dt) = 0;
+    // === 核心修正 ===
+    // 我們修改合約，讓 update 函式可以回傳一個指向新 GameObject 的指標。
+    // 如果沒有要產生物件，它就回傳 nullptr。
+    // 注意：回傳型別是泛型的 GameObject，而不是特定的 Bullet。
+    virtual std::unique_ptr<GameObject> update(sf::Time dt) = 0;
+    
     virtual void draw(sf::RenderWindow& window) const = 0;
 
-    // 公開的 getter / setter
+    // Getter / Setter
     sf::Vector2f getPosition() const { return _position; }
     bool isAlive() const { return _isAlive; }
     void destroy() { _isAlive = false; }
