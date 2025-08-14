@@ -1,0 +1,3 @@
+/home/CompOrg/practice/Apath/build/CMakeFiles/AStarGame.dir
+/home/CompOrg/practice/Apath/build/CMakeFiles/edit_cache.dir
+/home/CompOrg/practice/Apath/build/CMakeFiles/rebuild_cache.dir
