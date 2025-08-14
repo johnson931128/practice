@@ -13,7 +13,7 @@ public:
     // 這是繼承時的「合約」，要求我們必須提供 Asteroid 自己版本的更新邏輯和繪製方式。
     std::unique_ptr<GameObject> update(sf::Time dt) override;
     void draw(sf::RenderWindow& window) const override;
-
+    float getCollisionRadius() const override;
 private:
     // 我們選用 SFML 函式庫中的 CircleShape 來代表小行星的形狀。
     sf::CircleShape _shape;

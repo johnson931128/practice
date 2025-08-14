@@ -19,7 +19,7 @@ draw(window):
 // Bullet 的建構函式實作
 Bullet::Bullet(sf::Vector2f position, float angle)
     // 步驟 1: 初始化父類別 GameObject
-    : GameObject("Bullet", "A projectile")
+    : GameObject("Bullet", 5.f)
 {
     // 步驟 2: 設定子彈的外觀
     // 我們希望子彈是一個細長的小長方形
@@ -57,4 +57,9 @@ void Bullet::draw(sf::RenderWindow& window) const {
     sf::RectangleShape shapeToDraw = _shape;
     shapeToDraw.setPosition(_position);
     window.draw(shapeToDraw);
+}
+
+
+float Bullet::getCollisionRadius() const {
+    return 5.f;
 }

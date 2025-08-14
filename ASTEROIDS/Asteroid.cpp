@@ -22,10 +22,11 @@ float randomFloat(float min, float max) {
 // Asteroid 的建構函式實作
 Asteroid::Asteroid(sf::Vector2u windowSize)
     // 第一步：初始化父類別 GameObject 的部分
-    : GameObject("Asteroid", "A space rock") 
+    : GameObject("Asteroid", 0.f) 
 {
     // 第二步：初始化 Asteroid 自己的成員變數
     float radius = randomFloat(15.f, 45.f);
+    _radius = radius;
     _rotationSpeed = randomFloat(-50.f, 50.f);
 
     // 設定外觀 (使用我們剛剛初始化的 radius)
@@ -85,4 +86,10 @@ void Asteroid::draw(sf::RenderWindow& window) const {
     shapeToDraw.setPosition(_position);
     shapeToDraw.setRotation(_shape.getRotation());
     window.draw(shapeToDraw);
+}
+
+
+
+float Asteroid::getCollisionRadius() const {
+    return _shape.getRadius();
 }

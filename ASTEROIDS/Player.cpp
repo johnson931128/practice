@@ -3,7 +3,7 @@
 #include <cmath>
 
 Player::Player() 
-    : GameObject("Player", "Player's spaceship"),
+    : GameObject("Player", 10.f),
       _rotationSpeed(200.f), 
       _movementSpeed(300.f), 
       _isMoving(false),
@@ -66,4 +66,8 @@ void Player::draw(sf::RenderWindow& window) const {
     shapeToDraw.setPosition(_position);
     shapeToDraw.setRotation(_shape.getRotation()); // 確保旋轉角度也能被正確繪製
     window.draw(shapeToDraw);
+}
+
+float Player::getCollisionRadius() const {
+    return 15.f;
 }

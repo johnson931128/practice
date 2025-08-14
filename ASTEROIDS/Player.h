@@ -13,7 +13,7 @@ public:
     // 現在這個 override 是合法的了，因為父類別的 update 也回傳 unique_ptr
     // 但請注意，回傳型別必須和父類別完全一樣，是 unique_ptr<GameObject>
     std::unique_ptr<GameObject> update(sf::Time dt) override;
-    
+    float getCollisionRadius() const override;
     void draw(sf::RenderWindow& window) const override;
 
 private:

@@ -14,7 +14,7 @@ public:
     // 履行與 GameObject 的合約，提供自己的 update 和 draw 實作。
     std::unique_ptr<GameObject> update(sf::Time dt) override;
     void draw(sf::RenderWindow& window) const override;
-
+    float getCollisionRadius() const override;
 
 private:
     // 為了跟玩家的三角形和小行星的多邊形區分，我們用一個簡單的長方形來代表子彈。
