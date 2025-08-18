@@ -1,5 +1,5 @@
-CMakeFiles/AStarGame.dir/main.cpp.o: \
- /home/CompOrg/practice/Apath/main.cpp /usr/include/stdc-predef.h \
+CMakeFiles/AStarGame.dir/Game.cpp.o: \
+ /home/CompOrg/practice/Apath/Game.cpp /usr/include/stdc-predef.h \
  /home/CompOrg/practice/Apath/Game.h /usr/include/SFML/Graphics.hpp \
  /usr/include/SFML/Window.hpp /usr/include/SFML/System.hpp \
  /usr/include/SFML/Config.hpp /usr/include/SFML/System/Clock.hpp \
@@ -235,4 +235,5 @@ CMakeFiles/AStarGame.dir/main.cpp.o: \
  /usr/include/SFML/Graphics/Sprite.hpp \
  /usr/include/SFML/Graphics/Text.hpp \
  /usr/include/SFML/Graphics/VertexBuffer.hpp \
- /home/CompOrg/practice/Apath/Pathfinding.h
+ /home/CompOrg/practice/Apath/Pathfinding.h /usr/include/c++/13/iostream \
+ /usr/include/c++/13/istream /usr/include/c++/13/bits/istream.tcc

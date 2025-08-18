@@ -8,6 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "/home/CompOrg/practice/Apath/Game.cpp" "CMakeFiles/AStarGame.dir/Game.cpp.o" "gcc" "CMakeFiles/AStarGame.dir/Game.cpp.o.d"
   "/home/CompOrg/practice/Apath/main.cpp" "CMakeFiles/AStarGame.dir/main.cpp.o" "gcc" "CMakeFiles/AStarGame.dir/main.cpp.o.d"
   )
 

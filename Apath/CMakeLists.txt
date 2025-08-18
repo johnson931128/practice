@@ -1,18 +1,12 @@
-# CMake 最低版本要求
+# ... (前面的 cmake_minimum_required, project, set, find_package 都維持不變) ...
 cmake_minimum_required(VERSION 3.10)
-
-# 專案名稱
 project(AStarPathfinding)
-
-# 設定 C++ 標準為 C++17
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-# 尋找 SFML 函式庫
 find_package(SFML 2.6 COMPONENTS graphics window system REQUIRED)
 
-# 新增可執行檔，來源為 main.cpp
-add_executable(AStarGame main.cpp)
+# 修改這一行，加入新的檔案
+add_executable(AStarGame main.cpp Game.cpp) # <--- 把 Game.cpp 加進來
 
-# 連結 SFML 函式庫到我們的專案
+# ... (target_link_libraries 維持不變) ...
 target_link_libraries(AStarGame PRIVATE sfml-graphics)
