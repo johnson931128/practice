@@ -4,6 +4,7 @@
 CMakeFiles/AStarGame.dir/Game.cpp.o
  /home/CompOrg/practice/Apath/Game.cpp
  /home/CompOrg/practice/Apath/Game.h
+ /home/CompOrg/practice/Apath/Pathfinding.h
  /usr/include/SFML/Config.hpp
  /usr/include/SFML/Graphics.hpp
  /usr/include/SFML/Graphics/BlendMode.hpp
@@ -304,6 +305,7 @@ CMakeFiles/AStarGame.dir/Game.cpp.o
 CMakeFiles/AStarGame.dir/main.cpp.o
  /home/CompOrg/practice/Apath/main.cpp
  /home/CompOrg/practice/Apath/Game.h
+ /home/CompOrg/practice/Apath/Pathfinding.h
  /usr/include/SFML/Config.hpp
  /usr/include/SFML/Graphics.hpp
  /usr/include/SFML/Graphics/BlendMode.hpp

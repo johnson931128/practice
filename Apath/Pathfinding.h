@@ -24,3 +24,12 @@ struct Node {
         return x == other.x && y == other.y;
     }
 };
+
+// --- 1. 新增 CompareNode 結構 ---
+// 這個結構是為了 std::priority_queue 準備的
+// 它會告訴 priority_queue 如何比較兩個 Node*，我們希望 fCost 最小的優先級最高
+struct CompareNode {
+    bool operator()(const Node* a, const Node* b) const {
+        return a->fCost > b->fCost;
+    }
+};

@@ -3,6 +3,7 @@
 
 CMakeFiles/AStarGame.dir/Game.cpp.o: /home/CompOrg/practice/Apath/Game.cpp \
   /home/CompOrg/practice/Apath/Game.h \
+  /home/CompOrg/practice/Apath/Pathfinding.h \
   /usr/include/SFML/Config.hpp \
   /usr/include/SFML/Graphics.hpp \
   /usr/include/SFML/Graphics/BlendMode.hpp \
@@ -302,6 +303,7 @@ CMakeFiles/AStarGame.dir/Game.cpp.o: /home/CompOrg/practice/Apath/Game.cpp \
 
 CMakeFiles/AStarGame.dir/main.cpp.o: /home/CompOrg/practice/Apath/main.cpp \
   /home/CompOrg/practice/Apath/Game.h \
+  /home/CompOrg/practice/Apath/Pathfinding.h \
   /usr/include/SFML/Config.hpp \
   /usr/include/SFML/Graphics.hpp \
   /usr/include/SFML/Graphics/BlendMode.hpp \
@@ -649,6 +651,8 @@ CMakeFiles/AStarGame.dir/main.cpp.o: /home/CompOrg/practice/Apath/main.cpp \
 
 /usr/include/x86_64-linux-gnu/bits/types/mbstate_t.h:
 
+/usr/include/x86_64-linux-gnu/bits/types/locale_t.h:
+
 /usr/include/c++/13/bits/predefined_ops.h:
 
 /usr/include/c++/13/iosfwd:
@@ -809,10 +813,6 @@ CMakeFiles/AStarGame.dir/main.cpp.o: /home/CompOrg/practice/Apath/main.cpp \
 
 /usr/include/c++/13/algorithm:
 
-/usr/include/c++/13/bits/ptr_traits.h:
-
-/usr/include/SFML/Graphics/Text.hpp:
-
 /usr/include/SFML/Graphics/Sprite.hpp:
 
 /usr/include/SFML/Graphics/Export.hpp:
@@ -826,10 +826,6 @@ CMakeFiles/AStarGame.dir/main.cpp.o: /home/CompOrg/practice/Apath/main.cpp \
 /usr/include/SFML/Config.hpp:
 
 /usr/include/c++/13/ctime:
-
-/usr/include/libintl.h:
-
-/usr/include/SFML/System/String.hpp:
 
 /usr/include/SFML/System/ThreadLocalPtr.hpp:
 
@@ -845,11 +841,35 @@ CMakeFiles/AStarGame.dir/main.cpp.o: /home/CompOrg/practice/Apath/main.cpp \
 
 /home/CompOrg/practice/Apath/Game.h:
 
+/usr/include/libintl.h:
+
+/usr/include/SFML/System/String.hpp:
+
+/usr/include/c++/13/debug/assertions.h:
+
+/usr/include/SFML/Window/VideoMode.hpp:
+
+/usr/include/SFML/Graphics/Font.hpp:
+
+/usr/include/c++/13/bits/streambuf.tcc:
+
+/usr/include/x86_64-linux-gnu/c++/13/bits/ctype_inline.h:
+
+/usr/include/c++/13/bits/char_traits.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/clock_t.h:
+
 /usr/include/SFML/Graphics/Shape.hpp:
 
 /usr/include/SFML/Graphics/Drawable.hpp:
 
 /usr/include/c++/13/bits/vector.tcc:
+
+/usr/include/c++/13/bits/locale_facets.h:
+
+/usr/include/SFML/System/MemoryInputStream.hpp:
+
+/usr/include/x86_64-linux-gnu/bits/locale.h:
 
 /usr/include/SFML/Graphics/Rect.hpp:
 
@@ -873,29 +893,11 @@ CMakeFiles/AStarGame.dir/main.cpp.o: /home/CompOrg/practice/Apath/main.cpp \
 
 /usr/include/c++/13/bits/exception_defines.h:
 
-/usr/include/SFML/Window/VideoMode.hpp:
-
-/usr/include/SFML/Graphics/Font.hpp:
-
-/usr/include/c++/13/bits/streambuf.tcc:
-
 /usr/include/SFML/Window/Vulkan.hpp:
 
 /usr/include/c++/13/bits/locale_facets_nonio.tcc:
 
 /usr/include/SFML/Graphics/Glsl.hpp:
-
-/usr/include/c++/13/bits/locale_facets.h:
-
-/usr/include/SFML/System/MemoryInputStream.hpp:
-
-/usr/include/x86_64-linux-gnu/bits/locale.h:
-
-/usr/include/x86_64-linux-gnu/c++/13/bits/ctype_inline.h:
-
-/usr/include/c++/13/bits/char_traits.h:
-
-/usr/include/x86_64-linux-gnu/bits/types/clock_t.h:
 
 /usr/include/SFML/System/Clock.hpp:
 
@@ -959,6 +961,8 @@ CMakeFiles/AStarGame.dir/main.cpp.o: /home/CompOrg/practice/Apath/main.cpp \
 
 /usr/include/x86_64-linux-gnu/c++/13/bits/ctype_base.h:
 
+/home/CompOrg/practice/Apath/Pathfinding.h:
+
 /usr/include/SFML/System/InputStream.hpp:
 
 /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h:
@@ -988,6 +992,10 @@ CMakeFiles/AStarGame.dir/main.cpp.o: /home/CompOrg/practice/Apath/main.cpp \
 /usr/include/SFML/System/Vector2.hpp:
 
 /usr/include/c++/13/iostream:
+
+/usr/include/SFML/Graphics/Text.hpp:
+
+/usr/include/c++/13/bits/ptr_traits.h:
 
 /usr/include/c++/13/bits/refwrap.h:
 
@@ -1042,8 +1050,6 @@ CMakeFiles/AStarGame.dir/main.cpp.o: /home/CompOrg/practice/Apath/main.cpp \
 /usr/include/c++/13/cwchar:
 
 /usr/include/c++/13/cwctype:
-
-/usr/include/c++/13/debug/assertions.h:
 
 /usr/include/linux/errno.h:
 
@@ -1192,5 +1198,3 @@ CMakeFiles/AStarGame.dir/main.cpp.o: /home/CompOrg/practice/Apath/main.cpp \
 /usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/error_t.h:
-
-/usr/include/x86_64-linux-gnu/bits/types/locale_t.h:
