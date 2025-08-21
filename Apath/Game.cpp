@@ -1,16 +1,18 @@
 #include "Game.h"
 #include <iostream>
 
-// --- 新增：A* 演算法需要的標頭檔 ---
-#include <queue>      // For std::priority_queue (Open List)
-#include <cmath>      // For std::abs (計算 H cost)
-#include <algorithm>  // For std::reverse (反轉最終路徑)
+// A* 演算法需要的標頭檔
+#include <queue>
+#include <cmath>
+#include <algorithm>
 
-
-// Game::Game() 的實作
+// Game::Game() 的實作 (Constructor)
 Game::Game() 
 : mWindow(sf::VideoMode(WINDOW_SIZE, WINDOW_SIZE), "A* Pathfinding"), 
-  mTargetPos(-1, -1)
+  mTargetPos(-1, -1),
+  mAnimationTimeStep(0.05f), // 設定每步動畫間隔為 0.05 秒
+  mCurrentPathIndex(0),
+  mIsAnimating(false)
 {
     mWindow.setFramerateLimit(60);
     initGrid();
@@ -39,13 +41,49 @@ void Game::initPlayer() {
     mPlayer.setPosition(mPlayerPos.x * CELL_SIZE, mPlayerPos.y * CELL_SIZE);
 }
 
-// run() 的實作
+// run() 的實作 (主遊戲迴圈)
 void Game::run() {
     while (mWindow.isOpen()) {
         processEvents();
+        update(); // 在處理事件後、繪製畫面錢，更新遊戲狀態
         render();
     }
 }
+
+// update() 的實作 (動畫邏輯核心)
+void Game::update() {
+    if (!mIsAnimating) return; // 如果不在動畫狀態，直接返回
+
+    // 檢查距離上次移動是否已超過指定間隔
+    if (mAnimationClock.getElapsedTime().asSeconds() > mAnimationTimeStep) {
+        // 移動到路徑的下一個節點
+        mCurrentPathIndex++;
+
+        // 如果已經走完路徑
+        if (mCurrentPathIndex >= mPath.size()) {
+            mIsAnimating = false; // 停止動畫
+            mPlayerPos = mTargetPos; // 確保玩家最終位置與目標一致
+            // 清除路徑和目標的顏色
+             mGrid[mTargetPos.x][mTargetPos.y].setFillColor(sf::Color(30, 30, 30));
+             for(const auto& node : mPath) {
+                mGrid[node.x][node.y].setFillColor(sf::Color(30, 30, 30));
+            }
+            return;
+        }
+
+        // 更新玩家位置並將經過的格子變藍
+        const auto& nextNode = mPath[mCurrentPathIndex];
+        mPlayerPos = {nextNode.x, nextNode.y};
+        mPlayer.setPosition(mPlayerPos.x * CELL_SIZE, mPlayerPos.y * CELL_SIZE);
+        
+        // 將剛走過的格子（前一個節點）變藍
+        const auto& prevNode = mPath[mCurrentPathIndex - 1];
+        mGrid[prevNode.x][prevNode.y].setFillColor(sf::Color::Blue);
+
+        mAnimationClock.restart(); // 重置時鐘，準備下一次移動
+    }
+}
+
 
 // processEvents() 的實作
 void Game::processEvents() {
@@ -62,35 +100,36 @@ void Game::processEvents() {
     }
 }
 
+// handleMouseClick() 的實作
 void Game::handleMouseClick(sf::Vector2i mousePos) {
+    if (mIsAnimating) return; // 如果正在播放動畫，則不接受新的點擊
+
     int col = mousePos.x / CELL_SIZE;
     int row = mousePos.y / CELL_SIZE;
 
     if (col >= 0 && col < GRID_SIZE && row >= 0 && row < GRID_SIZE) {
-
-        // --- 1. 清除舊路徑和舊目標的顏色 ---
-        // 將上一個目標格變回灰色
+        // 清除舊狀態 (目標和路徑顏色)
         if (mTargetPos.x != -1) {
             mGrid[mTargetPos.x][mTargetPos.y].setFillColor(sf::Color(30, 30, 30));
         }
-        // 將上一條路徑的格子變回灰色
         for(const auto& node : mPath) {
-            // 不改變起點和終點的顏色
-            if ((node.x == mPlayerPos.x && node.y == mPlayerPos.y) || (node.x == mTargetPos.x && node.y == mTargetPos.y)) {
-                continue;
-            }
             mGrid[node.x][node.y].setFillColor(sf::Color(30, 30, 30));
         }
+
         // 設定新目標
         mTargetPos = {col, row};
         mGrid[mTargetPos.x][mTargetPos.y].setFillColor(sf::Color::Green);
         std::cout << "New target set at: (" << col << ", " << row << ")\n";
 
-        // 呼叫 A* 搜尋
+        // 計算路徑
         mPath = aStarSearch(mPlayerPos, mTargetPos);
 
-        // --- 2. 繪製新路徑 ---
-        drawPath();
+        // 啟動動畫
+        if (!mPath.empty()) {
+            mIsAnimating = true;
+            mCurrentPathIndex = 0;
+            mAnimationClock.restart();
+        }
     }
 }
 
@@ -204,17 +243,4 @@ std::vector<Node> Game::reconstructPath(Node* goalNode) {
     }
     std::reverse(path.begin(), path.end());
     return path;
-}
-
-// --- 3. 在檔案底部新增 drawPath 的實作 ---
-void Game::drawPath() {
-    // 遍歷 mPath 中的每一個 Node
-    for(const auto& node : mPath) {
-        // 我們不希望覆蓋掉起點(紅色)和終點(綠色)的顏色
-        if ((node.x == mPlayerPos.x && node.y == mPlayerPos.y) || (node.x == mTargetPos.x && node.y == mTargetPos.y)) {
-            continue;
-        }
-        // 將路徑上的格子設為藍色
-        mGrid[node.x][node.y].setFillColor(sf::Color::Blue);
-    }
 }
