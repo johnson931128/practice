@@ -1,0 +1,102 @@
+#include "Snake.h"
+#include "Config.h"
+#include <algorithm> // for std::any_of
+#include <iterator> // for std::next
+
+
+Snake::Snake() {
+    mDirection = Direction::None;
+    mIsAlive = true;
+    mGrowPending = false;
+
+    mBody.clear();
+
+    // 【修改這裡】先計算中心格線的索引，再換算回像素位置
+    size_t startX = static_cast<size_t>(WINDOW_WIDTH / GRID_SIZE) / 2;
+    size_t startY = static_cast<size_t>(WINDOW_HEIGHT / GRID_SIZE) / 2;
+
+    for (int i = 0; i < 3; ++i) {
+        sf::RectangleShape segment;
+        segment.setSize(sf::Vector2f(GRID_SIZE - 1.0f, GRID_SIZE - 1.0f));
+        segment.setFillColor(sf::Color::Green);
+        segment.setPosition((startX - i) * GRID_SIZE, startY * GRID_SIZE);
+        mBody.push_back(segment);
+    }
+}
+
+void Snake::grow() {mGrowPending = true;}
+
+
+void Snake::setDirection(Direction dir) {
+    // 防止蛇直接 180 度掉頭
+    if (mDirection != Direction::None){
+        if (mDirection == Direction::Up && dir == Direction::Down) return;
+        if (mDirection == Direction::Down && dir == Direction::Up) return;
+        if (mDirection == Direction::Left && dir == Direction::Right) return;
+        if (mDirection == Direction::Right && dir == Direction::Left) return;
+    }
+    mDirection = dir;
+}
+
+
+bool Snake::isAlive() const{
+    return mIsAlive;
+}
+
+
+sf::Vector2f Snake::getHeadPosition() const {
+    if (mBody.empty()) {
+        return sf::Vector2f(-1, -1);
+    }
+    return mBody.front().getPosition();
+}
+
+void Snake::update() {
+    if (!mIsAlive || mDirection == Direction::None) return;
+
+    sf::RectangleShape newHead = mBody.front();
+    
+    // switch case 的移動邏輯不變
+    switch (mDirection) {
+        case Direction::Up:    newHead.move(0, -GRID_SIZE); break;
+        case Direction::Down:  newHead.move(0, GRID_SIZE);  break;
+        case Direction::Left:  newHead.move(-GRID_SIZE, 0); break;
+        case Direction::Right: newHead.move(GRID_SIZE, 0);  break;
+        default: break;
+    }
+    
+    // 邊界碰撞偵測不變
+    sf::Vector2f headPos = newHead.getPosition();
+    if (headPos.x < 0 || headPos.x >= WINDOW_WIDTH || headPos.y < 0 || headPos.y >= WINDOW_HEIGHT) {
+        mIsAlive = false;
+        return;
+    }
+
+    // 【新增】自我碰撞偵測
+    // 我們需要在「將新蛇頭加入身體前」檢查
+    // 檢查範圍是從「第二節」到「蛇尾」
+    bool collision = std::any_of(std::next(mBody.begin()), mBody.end(),
+        [&](const sf::RectangleShape& segment){
+            return newHead.getPosition() == segment.getPosition();
+        }
+    );
+
+    if (collision){mIsAlive = false; return; }
+
+    mBody.push_front(newHead);
+
+    // 【修改】核心成長邏輯
+    // 只有在「沒有」待成長指令時，才移除尾巴
+    if (mGrowPending) {
+        mGrowPending = false; // 成長指令已執行，重設標記為 false
+    } else {
+        mBody.pop_back(); // 如果沒有成長指令，就像平常一樣移除尾巴
+    }
+}
+
+
+void Snake::render(sf::RenderWindow& window){
+    for (const auto& segment : mBody){
+        window.draw(segment);
+    }
+}
