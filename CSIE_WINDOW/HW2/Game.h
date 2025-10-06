@@ -23,10 +23,14 @@ public:
 
 private:
     int time;
+    bool money_is_enough;
+
+
     Player player;
+
+
     std::map<int, Stock> stocks;
     std::mt19937 rng;
-
     // --- 【新增】進階功能需要的成員變數 ---
     std::vector<Transaction> pending_transactions; // T+1 待交割的交易
     

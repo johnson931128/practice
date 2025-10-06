@@ -7,8 +7,11 @@
 Game::Game() {
     time = 0;
     player.money = 3000.0;
+    loan_principal = 0.0;
+    loan_remaining = 0.0;
+    money_is_enough = true; // 初始化遊戲狀態旗標
 
-    stocks[2330] = {2330, "TSMC", 1180, 0.01};
+    stocks[2330] = {2330, "TSMC", 1180.0, 0.01};
     stocks[47]   = {47, "KFC", 144.58, 0.05};
     stocks[58]   = {58, "MYHOTKISS", 2.0, 0.50};
 
@@ -22,8 +25,8 @@ void Game::run() {
         advance_time();
     }
 
-    bool game_is_running = true; // <--- 新增一個旗標
-    while (game_is_running) { // <--- 迴圈條件改成檢查旗標
+
+    while (money_is_enough) { // <--- 迴圈條件改成檢查旗標
         display_main_menu();
 
         int option;
@@ -44,11 +47,11 @@ void Game::run() {
             case 5: handle_loan(); break;
             default: // 處理 1~5 以外的數字
                 std::cout << "Exiting program..." << std::endl;
-                game_is_running = false; // <--- 修改旗標，讓迴圈在這次迭代後結束
+                money_is_enough = false; // <--- 修改旗標，讓迴圈在這次迭代後結束
                 break;
         }
 
-        if (game_is_running) { // <--- 只有在遊戲還在繼續時才推進時間
+        if (money_is_enough) { // <--- 只有在遊戲還在繼續時才推進時間
             advance_time();
         }
     }
@@ -214,52 +217,68 @@ void Game::handle_market_trend() {
 }
 
 
-void Game::handle_day_change(){
+void Game::handle_day_change() {
     std::cout << "\n--- 國際換日線 ---\n";
-    double net_settlement = 0.0;
-    double total_dividends = 0.0;
 
-    for (auto& pair : player.shares){
-        Stock& stock = stocks.at(pair.first);
-        double dividend = stock.price * pair.second * stock.dividend_rate;
-        total_dividends += dividend;
+    // 1. 股息
+    double total_dividends = 0.0;
+    for (const auto& pair : player.shares) {
+        int stock_id = pair.first;
+        int amount = pair.second;
+        const Stock& stock = stocks.at(stock_id);
+        total_dividends += stock.price * amount * stock.dividend_rate;
     }
-    std::cout << "收到股息金額 " << "..." << total_dividends << std::endl;
+    std::cout << "收到股息金額: " << std::fixed << std::setprecision(2) << total_dividends << std::endl;
     player.money += total_dividends;
 
-    for (auto& day : pending_transactions){
-        Transaction& transaction = day;
-        if (transaction.amount > 0){
-            double cost = transaction.price_per_share * transaction.amount;
-            net_settlement -= cost;
+    // 2. T+1 交割
+    double net_settlement = 0.0;
+    for (const auto& transaction : pending_transactions) {
+        if (transaction.amount > 0) {
+            net_settlement -= transaction.price_per_share * transaction.amount;
             player.shares[transaction.stock_id] += transaction.amount;
-        }
-
-        if (transaction.amount < 0){
-            double earnings = transaction.price_per_share * abs(transaction.amount);
-            net_settlement += earnings;
+        } else if (transaction.amount < 0) {
+            net_settlement += transaction.price_per_share * abs(transaction.amount); 
             player.shares[transaction.stock_id] += transaction.amount;
+            if (player.shares.at(transaction.stock_id) == 0) {
+                player.shares.erase(transaction.stock_id);
+            }
         }
     }
-            
-    std::cout << "最後交割金額: " << "..." << net_settlement << std::endl;
+    std::cout << "最後交割金額: " << std::fixed << std::setprecision(2) << net_settlement << std::endl;
     player.money += net_settlement;
     pending_transactions.clear();
+
+    // 3. 還款
+    if (loan_remaining > 0) {
+        double interest = loan_remaining * 0.10;
+        double principal_payment = loan_principal * 0.20;
+        if (principal_payment > loan_remaining) {
+            principal_payment = loan_remaining;
+        }
+        player.money -= (principal_payment + interest);
+        loan_remaining -= principal_payment;
+        std::cout << "貸款還了" << std::fixed << std::setprecision(2) << principal_payment
+                  << "、利息" << std::fixed << std::setprecision(2) << interest
+                  << " 尚餘 " << std::fixed << std::setprecision(2) << loan_remaining << std::endl;
+        if (loan_remaining <= 0) {
+            loan_principal = 0;
+            loan_remaining = 0;
+            std::cout << "恭喜，貸款已還清！" << std::endl;
+        }
+    }
+
+    // 4. 破產檢查
+    if (player.money < 0) {
+        std::cout << "金額不足交割..." << std::endl;
+        std::cout << "破產囉QQ, 最後金額為 " << std::fixed << std::setprecision(2) << player.money << std::endl;
+        money_is_enough = false;
+    }
 }
-
-
-
-
-
 
 
 void Game::handle_history() {
     std::cout << "THIS IS HISTORY YAS YAS ME LOVE HISTORY" << std::endl;
 }
-
-void Game::handle_loan() {
-    std::cout << "老闆，我不想努力了..." << std::endl;
-}
-
 
 
