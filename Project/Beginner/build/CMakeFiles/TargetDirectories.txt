@@ -1,0 +1,3 @@
+/home/CompOrg/practice/Project/Beginner/build/CMakeFiles/cgpa_calculator.dir
+/home/CompOrg/practice/Project/Beginner/build/CMakeFiles/edit_cache.dir
+/home/CompOrg/practice/Project/Beginner/build/CMakeFiles/rebuild_cache.dir
