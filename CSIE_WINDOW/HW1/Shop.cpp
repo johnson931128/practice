@@ -49,7 +49,7 @@ void Shop::run() {
     print_sales_report(); 
 }
 
-// Shop::setup 處理開店準備
+// Shop::setup
 void Shop::setup() {
     std::cout << "Please enter the number of product types for today: ";
     int product_count;
