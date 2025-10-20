@@ -1,0 +1,8 @@
+# 編譯產生的物件檔
+*.o
+
+# Windows 執行檔
+*.exe
+
+# Linux/macOS 執行檔 (指定名稱)
+wordscramble
